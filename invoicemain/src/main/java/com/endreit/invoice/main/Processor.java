@@ -42,10 +42,11 @@ public class Processor
      * 4. serviceValue = calculating value based on previous months (march) exchange rate
      *
      * @param executionDate Default date should be today, but it is possible to execute it for another date.
+     * @return Returns the output file path
      * @throws IOException
      * @throws InvalidFormatException
      */
-    public void execute(Date executionDate) throws IOException, InvalidFormatException
+    public String execute(Date executionDate) throws IOException, InvalidFormatException
     {
         Map beans = new HashMap();
         InvoiceModel invoice = buildInvoiceModel(executionDate);
@@ -59,6 +60,7 @@ public class Processor
         LOGGER.info(String.format("Generating xls %s", destinationPath));
         new XLSTransformer().transformXLS(templatePath, beans, destinationPath);
         LOGGER.info("Done");
+        return destinationPath;
     }
 
 

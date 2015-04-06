@@ -51,4 +51,18 @@ public final class FileHelper
         String destinationFileName = String.format(OUTPUT_FILE_NAME, outputFolderName);
         return new File(destinationFolder, destinationFileName).getAbsolutePath();
     }
+
+    public static void copyFileToBaseDirectory(String outputFilePath)
+    {
+        File baseDir = new File(".");
+        try
+        {
+            FileUtils.copyFileToDirectory(new File(outputFilePath), baseDir);
+        } catch (IOException e)
+        {
+            String msg = String.format("Cannot copy file %s top directory %s", outputFilePath, baseDir.getAbsolutePath());
+            LOGGER.severe(msg);
+            throw new RuntimeException(msg, e);
+        }
+    }
 }

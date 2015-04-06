@@ -1,11 +1,10 @@
 package com.endreit.invoice.cmdline;
 
-import com.endreit.invoice.inputparameters.ISalaryParams;
-import com.endreit.invoice.inputparameters.ISettingParams;
 import com.endreit.invoice.inputparameters.SalaryParamsPropertyFileImpl;
 import com.endreit.invoice.inputparameters.SettingParamsPropertyFileImpl;
 import com.endreit.invoice.logger.MyLogger;
 import com.endreit.invoice.main.Processor;
+import com.endreit.invoice.utils.FileHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,23 +12,38 @@ import java.util.Date;
 
 public class Main
 {
+    private static final String COPY_TO_BASE_DIR_FLAG = "copyToBaseDir";
+
+    private static boolean copyOutputToBaseDir = false;
+    private static Date executionDate = new Date();
+
     public static void main(String[] args) throws Exception
     {
+        initParams(args);
         MyLogger.setup();
 
-        ISettingParams settings = new SettingParamsPropertyFileImpl();
-        ISalaryParams salaryParams = new SalaryParamsPropertyFileImpl();
-        Processor p = new Processor(settings, salaryParams);
+        Processor p = new Processor(new SettingParamsPropertyFileImpl(), new SalaryParamsPropertyFileImpl());
+        String outputFilePath = p.execute(executionDate);
 
-        Date executionDate = null;
-        if (args != null && args.length == 1)
+        if (copyOutputToBaseDir)
         {
-            executionDate = getExecutionDate(args[0]);
-        } else
-        {
-            executionDate = new Date();
+            FileHelper.copyFileToBaseDirectory(outputFilePath);
         }
-        p.execute(executionDate);
+    }
+
+    private static void initParams(String[] args)
+    {
+        if (args != null)
+        {
+            if (args.length > 0)
+            {
+                copyOutputToBaseDir = COPY_TO_BASE_DIR_FLAG.equals(args[0]);
+            }
+            if (args.length > 1)
+            {
+                executionDate = getExecutionDate(args[1]);
+            }
+        }
     }
 
     private static Date getExecutionDate(String stringDate)
