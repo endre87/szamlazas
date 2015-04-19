@@ -33,6 +33,14 @@ public final class DateUtils
         return calendar.getTime();
     }
 
+    public static Date getPreviousMonthLastDay(Date executionDate)
+    {
+        Calendar c = getExecutionCalendar(executionDate);
+        c.roll(Calendar.MONTH, false);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return c.getTime();
+    }
+
     public static Date getDate(int year, int month, int dayOfMonth)
     {
         Calendar calendar = Calendar.getInstance();

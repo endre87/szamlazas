@@ -47,7 +47,10 @@ public final class FileHelper
     {
         String outputFolderName = destinationFolderName.replace("/", "_");
         File destinationFolder = new File(INVOICE_TEMP_DIRECTORY, outputFolderName);
-        destinationFolder.mkdir();
+        if (!destinationFolder.exists())
+        {
+            destinationFolder.mkdir();
+        }
         String destinationFileName = String.format(OUTPUT_FILE_NAME, outputFolderName);
         return new File(destinationFolder, destinationFileName).getAbsolutePath();
     }

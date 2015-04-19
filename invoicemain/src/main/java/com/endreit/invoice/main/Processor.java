@@ -77,8 +77,17 @@ public class Processor
 
     private SalaryModel buildSalaryModel(Date executionDate)
     {
-        int invoiceExchangeDay = salaryParams.getInvoiceExchangeDay();
-        Date exchangeDate = DateUtils.getPreviousMonthDate(executionDate, invoiceExchangeDay);
+        String invoiceExchangeDay = salaryParams.getInvoiceExchangeDay();
+        Date exchangeDate = null;
+        if (ISalaryParams.LAST_DAY_PROPERTY.equals(invoiceExchangeDay))
+        {
+            exchangeDate = DateUtils.getPreviousMonthLastDay(executionDate);
+        } else
+        {
+            int day = Integer.valueOf(invoiceExchangeDay);
+            exchangeDate = DateUtils.getPreviousMonthDate(executionDate, day);
+        }
+
         float euroExchangeRate = ExchangeValue.getEuroValue(exchangeDate);
 
         SalaryCalculator salaryCalculator = new SalaryCalculator(salaryParams, euroExchangeRate);

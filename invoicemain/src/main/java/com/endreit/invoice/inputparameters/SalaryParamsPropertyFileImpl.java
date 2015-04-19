@@ -17,9 +17,9 @@ public class SalaryParamsPropertyFileImpl implements ISalaryParams
     private final PropertiesReader reader = new PropertiesReader("salary.properties");
 
     @Override
-    public int getInvoiceExchangeDay()
+    public String getInvoiceExchangeDay()
     {
-        return Integer.valueOf(reader.getAsString(PROPERTY_EXCHANGE_DAY));
+        return reader.getAsString(PROPERTY_EXCHANGE_DAY);
     }
 
     @Override
