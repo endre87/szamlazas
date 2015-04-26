@@ -13,6 +13,7 @@
         <module>invoicemain</module>
         <module>common</module>
         <module>cmdline</module>
+        <module>com.endreit.invoice.googledrive</module>
     </modules>
 
     <dependencies>
