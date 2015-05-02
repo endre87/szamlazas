@@ -24,6 +24,12 @@
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>szamlazas</groupId>
+            <artifactId>com.endreit.invoice.googledrive</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

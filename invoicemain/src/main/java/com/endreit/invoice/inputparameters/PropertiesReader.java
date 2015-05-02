@@ -5,28 +5,29 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
 
-public class PropertiesReader
+public abstract class PropertiesReader
 {
-    private final String resourceName;
-    private final Properties props = new Properties();
-    private boolean loaded;
+    protected final String fileName;
+    protected final Properties props = new Properties();
+    protected boolean loaded;
 
-    public PropertiesReader(String resourceName)
+    public PropertiesReader(String fileName)
     {
-        this.resourceName = resourceName;
+        this.fileName = fileName;
     }
 
-    private void load()
+    protected abstract InputStream getInputStream();
+
+    protected void load()
     {
         try
         {
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            InputStream stream = loader.getResourceAsStream(resourceName);
+            InputStream stream = getInputStream();
             props.load(stream);
             loaded = true;
         } catch (IOException e)
         {
-            throw new RuntimeException("Cannot load resource property file: " + resourceName, e);
+            throw new RuntimeException("Cannot load resource property file: " + fileName, e);
         }
     }
 

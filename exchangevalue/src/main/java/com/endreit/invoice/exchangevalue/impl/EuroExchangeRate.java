@@ -46,7 +46,7 @@ public class EuroExchangeRate
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         String strTemp = br.readLine();
 
-        LOGGER.info(String.format("1 Euro = %s RON", strTemp));
+        LOGGER.info(String.format("Exchange rate %s 1 Euro = %s RON", date, strTemp));
 
         return Float.valueOf(strTemp);
     }

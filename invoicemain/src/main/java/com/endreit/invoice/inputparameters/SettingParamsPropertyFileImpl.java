@@ -1,5 +1,7 @@
 package com.endreit.invoice.inputparameters;
 
+import java.io.File;
+
 public class SettingParamsPropertyFileImpl implements ISettingParams
 {
     public static final String PROPERTY_INVOICE_DAY = "InvoiceDay";
@@ -10,8 +12,12 @@ public class SettingParamsPropertyFileImpl implements ISettingParams
 
     public static final String PROPERTY_EXPENSE_DATE_FORMAT = "ExpenseDateFormat";
 
+    private final PropertiesReader reader;
 
-    private PropertiesReader reader = new PropertiesReader("settings.properties");
+    public SettingParamsPropertyFileImpl(File directory, String propFileName)
+    {
+        this.reader = new FilePropertiesReader(directory, propFileName);
+    }
 
     @Override
     public int getInvoiceDay()

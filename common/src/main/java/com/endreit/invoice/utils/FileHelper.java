@@ -4,55 +4,55 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Logger;
 
 public final class FileHelper
 {
     private static final Logger LOGGER = Logger.getLogger(FileHelper.class.getName());
 
-    private static final String INVOICE_TEMP_DIRECTORY_NAME = "Invoice_v1";
-
-    private static final String OUTPUT_FILE_NAME = "%sEND_INVOICE.xls";
-
-    private static final File INVOICE_TEMP_DIRECTORY;
-
-    static
+    public static File createFolderInsideTemporaryDir(String folder, boolean deleteFirstIfAlreadyExists)
     {
         File tempDirectory = FileUtils.getTempDirectory();
-        File invoiceTempDirectory = new File(tempDirectory, INVOICE_TEMP_DIRECTORY_NAME);
-        invoiceTempDirectory.mkdir();
-        INVOICE_TEMP_DIRECTORY = invoiceTempDirectory;
+        return createFolder(tempDirectory.getAbsolutePath(), folder, deleteFirstIfAlreadyExists);
     }
 
-    public static String extractTemplate(String templateFileName)
+    public static File createFolder(String parentFolder, String folder, boolean deleteFirstIfAlreadyExists)
     {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        final URL template = loader.getResource(templateFileName);
+        File parent = new File(parentFolder);
+        if (!parent.exists())
+        {
+            throw new RuntimeException("Parent folder doesn't exists!");
+        }
+        File folderToCreate = new File(parent, folder);
+        if (!folderToCreate.exists())
+        {
+            createUnExistingFolder(folderToCreate);
+        } else if (deleteFirstIfAlreadyExists)
+        {
+            deleteExistingFolder(folderToCreate);
+            createUnExistingFolder(folderToCreate);
+        }
+        return folderToCreate;
+    }
 
-        File destination = new File(INVOICE_TEMP_DIRECTORY, templateFileName);
+    private static void deleteExistingFolder(File folder)
+    {
         try
         {
-            FileUtils.copyURLToFile(template, destination);
-            return destination.getAbsolutePath();
+            FileUtils.deleteDirectory(folder);
         } catch (IOException e)
         {
-            String msg = String.format("Cannot copy URL %s to destination %s", template.getPath(), destination.getAbsolutePath());
-            LOGGER.severe(msg);
-            throw new RuntimeException(msg, e);
+            throw new RuntimeException("Cannot delete folder: " + folder.getAbsolutePath(), e);
         }
     }
 
-    public static String setupDestinationFile(String destinationFolderName)
+    private static File createUnExistingFolder(File folder)
     {
-        String outputFolderName = destinationFolderName.replace("/", "_");
-        File destinationFolder = new File(INVOICE_TEMP_DIRECTORY, outputFolderName);
-        if (!destinationFolder.exists())
+        if (!folder.mkdir())
         {
-            destinationFolder.mkdir();
+            throw new RuntimeException("Cannot create folder: " + folder.getAbsolutePath());
         }
-        String destinationFileName = String.format(OUTPUT_FILE_NAME, outputFolderName);
-        return new File(destinationFolder, destinationFileName).getAbsolutePath();
+        return folder;
     }
 
     public static void copyFileToBaseDirectory(String outputFilePath)

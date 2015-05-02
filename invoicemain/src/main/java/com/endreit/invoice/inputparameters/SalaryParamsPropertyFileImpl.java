@@ -1,5 +1,7 @@
 package com.endreit.invoice.inputparameters;
 
+import java.io.File;
+
 public class SalaryParamsPropertyFileImpl implements ISalaryParams
 {
     public static final String PROPERTY_EXCHANGE_DAY = "ExchangeDay";
@@ -14,7 +16,12 @@ public class SalaryParamsPropertyFileImpl implements ISalaryParams
 
     public static final String PROPERTY_PROFIT_TAX_PERCENT = "ProfitTaxPercent";
 
-    private final PropertiesReader reader = new PropertiesReader("salary.properties");
+    private final PropertiesReader reader;
+
+    public SalaryParamsPropertyFileImpl(File directory, String propFileName)
+    {
+        this.reader = new FilePropertiesReader(directory, propFileName);
+    }
 
     @Override
     public String getInvoiceExchangeDay()

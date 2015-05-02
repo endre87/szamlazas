@@ -6,7 +6,6 @@ import com.endreit.invoice.inputparameters.ISettingParams;
 import com.endreit.invoice.model.InvoiceModel;
 import com.endreit.invoice.model.SalaryModel;
 import com.endreit.invoice.utils.DateUtils;
-import com.endreit.invoice.utils.FileHelper;
 import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
@@ -16,20 +15,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class Processor
+public abstract class Processor
 {
     private static final Logger LOGGER = Logger.getLogger(Processor.class.getName());
 
-    private static final String templateFileName = "templates/invoice.xls";
+    protected ISettingParams settingParams;
+    protected ISalaryParams salaryParams;
 
-    private final ISettingParams settingParams;
-    private final ISalaryParams salaryParams;
-
-    public Processor(ISettingParams settings, ISalaryParams salaryParams)
+    public Processor()
     {
-        this.settingParams = settings;
-        this.salaryParams = salaryParams;
+        init();
     }
+
+    protected abstract void init();
+
+    protected abstract String getDestinationPath(String variable);
+
+    protected abstract String getTemplatePath();
 
     /**
      * Generates invoice for the previous month
@@ -54,8 +56,8 @@ public class Processor
         beans.put("invoice", invoice);
         beans.put("salary", salary);
 
-        String templatePath = FileHelper.extractTemplate(templateFileName);
-        String destinationPath = FileHelper.setupDestinationFile(invoice.getExpenseStringNumber());
+        String templatePath = getTemplatePath();
+        String destinationPath = getDestinationPath(invoice.getExpenseStringNumber());
 
         LOGGER.info(String.format("Generating xls %s", destinationPath));
         new XLSTransformer().transformXLS(templatePath, beans, destinationPath);
@@ -78,7 +80,7 @@ public class Processor
     private SalaryModel buildSalaryModel(Date executionDate)
     {
         String invoiceExchangeDay = salaryParams.getInvoiceExchangeDay();
-        Date exchangeDate = null;
+        Date exchangeDate;
         if (ISalaryParams.LAST_DAY_PROPERTY.equals(invoiceExchangeDay))
         {
             exchangeDate = DateUtils.getPreviousMonthLastDay(executionDate);

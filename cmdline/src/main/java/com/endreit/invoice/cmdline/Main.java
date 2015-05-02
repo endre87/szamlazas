@@ -1,9 +1,7 @@
 package com.endreit.invoice.cmdline;
 
-import com.endreit.invoice.inputparameters.SalaryParamsPropertyFileImpl;
-import com.endreit.invoice.inputparameters.SettingParamsPropertyFileImpl;
 import com.endreit.invoice.logger.MyLogger;
-import com.endreit.invoice.main.Processor;
+import com.endreit.invoice.main.Application;
 import com.endreit.invoice.utils.FileHelper;
 
 import java.text.ParseException;
@@ -22,8 +20,7 @@ public class Main
         initParams(args);
         MyLogger.setup();
 
-        Processor p = new Processor(new SettingParamsPropertyFileImpl(), new SalaryParamsPropertyFileImpl());
-        String outputFilePath = p.execute(executionDate);
+        String outputFilePath = Application.getInstance().execute(executionDate);
 
         if (copyOutputToBaseDir)
         {

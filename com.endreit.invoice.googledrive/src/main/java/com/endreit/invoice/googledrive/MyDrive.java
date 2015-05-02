@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
 
-public abstract class MyDrive
+public final class MyDrive
 {
     private static final String APPLICATION_NAME = "Invoice";
 
@@ -76,7 +76,7 @@ public abstract class MyDrive
     {
         // load client secrets
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
-                new InputStreamReader(MyDrive.class.getResourceAsStream("/client_secrets.json")));
+                new InputStreamReader(MyDrive.class.getResourceAsStream("/client_secret.json")));
         if (clientSecrets.getDetails().getClientId().startsWith("Enter")
                 || clientSecrets.getDetails().getClientSecret().startsWith("Enter "))
         {
@@ -86,20 +86,21 @@ public abstract class MyDrive
         }
         // set up authorization code flow
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                httpTransport, JSON_FACTORY, clientSecrets, Collections.singleton(DriveScopes.DRIVE_FILE))
+                httpTransport, JSON_FACTORY, clientSecrets, Collections.singleton(DriveScopes.DRIVE))
                 .setDataStoreFactory(dataStoreFactory)
                 .build();
         // authorize
         return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
     }
 
-    public static Drive getDrive()
+    public static <D> D execute(Class<D> clazz, MyDriveOperation<D> driveExecutor)
     {
-        return drive;
-    }
-
-    public static HttpTransport getHttpTransport()
-    {
-        return httpTransport;
+        try
+        {
+            return driveExecutor.execute(drive, httpTransport);
+        } catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }
