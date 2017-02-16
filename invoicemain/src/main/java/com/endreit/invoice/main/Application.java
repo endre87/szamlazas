@@ -64,11 +64,11 @@ public class Application extends Processor
         return new File(generatedDir, outputName).getAbsolutePath();
     }
 
-    @Override
-    public String execute(Date executionDate) throws IOException, InvalidFormatException
-    {
-        String outputFile = super.execute(executionDate);
-        GoogleDrive.getInstance().uploadFile(new File(outputFile));
+    public String run(Date executionDate, boolean uploadToDrive) throws IOException, InvalidFormatException {
+        String outputFile = execute(executionDate);
+        if (uploadToDrive) {
+            GoogleDrive.getInstance().uploadFile(new File(outputFile));
+        }
         return outputFile;
     }
 }

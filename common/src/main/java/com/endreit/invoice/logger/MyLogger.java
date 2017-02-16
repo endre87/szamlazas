@@ -15,7 +15,7 @@ public class MyLogger
     {
 
         // get the global logger to configure it
-        Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        Logger logger = Logger.getGlobal();
         logger.setLevel(Level.INFO);
 
         // suppress the logging output to the console

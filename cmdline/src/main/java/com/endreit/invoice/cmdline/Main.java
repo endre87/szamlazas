@@ -8,50 +8,49 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Main
-{
+public class Main {
     private static final String COPY_TO_BASE_DIR_FLAG = "copyToBaseDir";
 
+    private static final String NO_UPLOAD_TO_GOOGLE_DRIVE_TAG = "noUploadToGoogleDrive";
+
     private static boolean copyOutputToBaseDir = false;
+    private static boolean noUploadToGoogleDrive = false;
     private static Date executionDate = new Date();
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         initParams(args);
         MyLogger.setup();
 
-        String outputFilePath = Application.getInstance().execute(executionDate);
+        boolean uploadToDrive = !noUploadToGoogleDrive;
+        String outputFilePath = Application.getInstance().run(executionDate, uploadToDrive);
 
-        if (copyOutputToBaseDir)
-        {
+        if (copyOutputToBaseDir) {
             FileHelper.copyFileToBaseDirectory(outputFilePath);
         }
     }
 
-    private static void initParams(String[] args)
-    {
-        if (args != null)
-        {
-            if (args.length > 0)
-            {
-                copyOutputToBaseDir = COPY_TO_BASE_DIR_FLAG.equals(args[0]);
-            }
-            if (args.length > 1)
-            {
-                executionDate = getExecutionDate(args[1]);
+    private static void initParams(String[] args) {
+        if (args != null) {
+            if (args.length > 0) {
+                for (String arg : args) {
+                    if (arg.equals(NO_UPLOAD_TO_GOOGLE_DRIVE_TAG)) {
+                        noUploadToGoogleDrive = true;
+                    } else if (arg.equals(COPY_TO_BASE_DIR_FLAG)) {
+                        copyOutputToBaseDir = true;
+                    } else if (arg.startsWith("-D")) {
+                        executionDate = getExecutionDate(arg.substring(2));
+                    }
+                }
             }
         }
     }
 
-    private static Date getExecutionDate(String stringDate)
-    {
+    private static Date getExecutionDate(String stringDate) {
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        try
-        {
+        try {
             return dateFormat.parse(stringDate);
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             throw new RuntimeException("Invalid pattern! Date pattern to use: " + pattern);
         }
     }

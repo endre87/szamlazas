@@ -1,5 +1,7 @@
 package com.endreit.invoice.model;
 
+import com.endreit.invoice.utils.DateUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -10,16 +12,17 @@ public class InvoiceModel extends BaseModel
     private final Date invoiceDate;
     private final Date serviceDate;
     private final String invoiceDateFormat;
+    private Integer invoiceYear;
     private String invoiceStringNumber;
     private String serviceStringDate;
     private String expenseStringNumber;
     private String expenseStringDate;
 
-    public InvoiceModel(Integer invoiceNumber, Date invoiceDate, Date serviceDate, String invoiceDateFormat, String expenseDateFormat)
-    {
-        this.invoiceNumber = invoiceNumber;
-        this.invoiceDate = invoiceDate;
-        this.serviceDate = serviceDate;
+    public InvoiceModel(Date executionDate, int invoiceDay, int serviceDay, String invoiceDateFormat, String expenseDateFormat) {
+        this.invoiceYear = DateUtils.getYear(executionDate);
+        this.invoiceNumber = DateUtils.getMonth(executionDate) + 1; // public static final int APRIL = 3; if executed in april we need to display 004
+        this.invoiceDate = DateUtils.getDateFor(executionDate, invoiceDay);
+        this.serviceDate = DateUtils.getDateFor(executionDate, serviceDay);
         this.invoiceDateFormat = invoiceDateFormat;
         setInvoiceStringNumber();
         setServiceStringDate();
@@ -73,5 +76,9 @@ public class InvoiceModel extends BaseModel
     public String getExpenseStringDate()
     {
         return expenseStringDate;
+    }
+
+    public Integer getInvoiceYear() {
+        return invoiceYear;
     }
 }

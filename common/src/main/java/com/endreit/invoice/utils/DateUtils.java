@@ -25,6 +25,11 @@ public final class DateUtils
         return calendar.get(Calendar.MONTH);
     }
 
+    public static int getYear(Date executionDate) {
+        Calendar calendar = getExecutionCalendar(executionDate);
+        return calendar.get(Calendar.YEAR);
+    }
+
     public static Date getPreviousMonthDate(Date executionDate, int day)
     {
         Calendar calendar = getExecutionCalendar(executionDate);

@@ -6,7 +6,9 @@ import com.endreit.invoice.inputparameters.ISettingParams;
 import com.endreit.invoice.model.InvoiceModel;
 import com.endreit.invoice.model.SalaryModel;
 import com.endreit.invoice.utils.DateUtils;
+
 import net.sf.jxls.transformer.XLSTransformer;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.IOException;
@@ -38,7 +40,8 @@ public abstract class Processor
      * Example of flow: today is 16 april 2015 (executionDate)
      * - we need to generate the invoice for the previous month (march)
      * - executionDate dependent input parameters:
-     * 1. invoiceNumber = 003
+     * 0. invoiceYear = 2015
+     * 1. invoiceNumber = 004
      * 2. invoiceDate = xx/April/2015
      * 3. serviceDate = yy/April/2015
      * 4. serviceValue = calculating value based on previous months (march) exchange rate
@@ -48,7 +51,7 @@ public abstract class Processor
      * @throws IOException
      * @throws InvalidFormatException
      */
-    public String execute(Date executionDate) throws IOException, InvalidFormatException
+    protected String execute(Date executionDate) throws IOException, InvalidFormatException
     {
         Map beans = new HashMap();
         InvoiceModel invoice = buildInvoiceModel(executionDate);
@@ -68,13 +71,8 @@ public abstract class Processor
 
     private InvoiceModel buildInvoiceModel(Date executionDate)
     {
-        int month = DateUtils.getMonth(executionDate);
-        int invoiceNumber = month; // if executed in april -> month = 3 -> invoice number = 003
-        Date invoiceDate = DateUtils.getDateFor(executionDate, settingParams.getInvoiceDay());
-        Date serviceDate = DateUtils.getDateFor(executionDate, settingParams.getInvoiceServiceDay());
-        String invoiceDateFormat = settingParams.getInvoiceServiceDateFormat();
-        String expenseDateFormat = settingParams.getExpenseDateFormat();
-        return new InvoiceModel(invoiceNumber, invoiceDate, serviceDate, invoiceDateFormat, expenseDateFormat);
+        return new InvoiceModel(executionDate, settingParams.getInvoiceDay(), settingParams.getInvoiceServiceDay(), settingParams.getInvoiceServiceDateFormat(),
+                settingParams.getExpenseDateFormat());
     }
 
     private SalaryModel buildSalaryModel(Date executionDate)
