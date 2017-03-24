@@ -11,10 +11,10 @@ public class InvoiceModel extends BaseModel
     private final Integer invoiceNumber;
     private final Date invoiceDate;
     private final Date serviceDate;
-//    private final String invoiceDateFormat;
+    private final String invoiceDateFormat;
     private Integer invoiceYear;
     private String invoiceStringNumber;
-//    private String serviceStringDate;
+    private String serviceStringDate;
     private String expenseStringNumber;
     private String expenseStringDate;
 
@@ -23,9 +23,9 @@ public class InvoiceModel extends BaseModel
         this.invoiceNumber = DateUtils.getMonth(executionDate) + 1; // public static final int APRIL = 3; if executed in april we need to display 004
         this.invoiceDate = invoiceDate;
         this.serviceDate = serviceDate;
-//        this.invoiceDateFormat = invoiceDateFormat;
+        this.invoiceDateFormat = invoiceDateFormat;
         setInvoiceStringNumber();
-//        setServiceStringDate();
+        setServiceStringDate();
         setExpenseStringNumber();
         setExpenseStringDate(expenseDateFormat);
     }
@@ -42,11 +42,11 @@ public class InvoiceModel extends BaseModel
         expenseStringNumber = dateFormat.format(invoiceDate);
     }
 
-//    private void setServiceStringDate()
-//    {
-//        SimpleDateFormat dateFormat = new SimpleDateFormat(invoiceDateFormat);
-//        serviceStringDate = dateFormat.format(serviceDate);
-//    }
+    private void setServiceStringDate()
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(invoiceDateFormat);
+        serviceStringDate = dateFormat.format(serviceDate);
+    }
 
     private void setInvoiceStringNumber()
     {
@@ -63,10 +63,10 @@ public class InvoiceModel extends BaseModel
         return invoiceStringNumber;
     }
 
-//    public String getServiceStringDate()
-//    {
-//        return serviceStringDate;
-//    }
+    public String getServiceStringDate()
+    {
+        return serviceStringDate;
+    }
 
     public String getExpenseStringNumber()
     {
