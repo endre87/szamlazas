@@ -2,17 +2,19 @@ package com.endreit.invoice.inputparameters;
 
 public interface ISettingParams
 {
-    /**
-     * @return 1- 31 day of month
-     */
-    public int getInvoiceDay();
+    String LAST_WORKING_DAY = "LAST_WORKING_DAY";
 
     /**
-     * @return 1- 31 day of month
+     * @return 1- 31 day of month or literal: LAST_WORKING_DAY , LAST_WORKING_DAY-x (x is integer)
      */
-    public int getInvoiceServiceDay();
+    String getInvoiceDay();
 
-    public String getInvoiceServiceDateFormat();
+    /**
+     * @return 1- 31 day of month or literal: LAST_WORKING_DAY , LAST_WORKING_DAY-x (x is integer)
+     */
+    String getInvoiceServiceDay();
 
-    public String getExpenseDateFormat();
+    String getInvoiceServiceDateFormat();
+
+    String getExpenseDateFormat();
 }

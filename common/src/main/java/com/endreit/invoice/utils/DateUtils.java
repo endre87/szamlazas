@@ -19,14 +19,20 @@ public final class DateUtils
         return calendar.getTime();
     }
 
-    public static int getMonth(Date executionDate)
+    public static int getDayOfMonth(Date date)
     {
-        Calendar calendar = getExecutionCalendar(executionDate);
+        Calendar calendar = getExecutionCalendar(date);
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static int getMonth(Date date)
+    {
+        Calendar calendar = getExecutionCalendar(date);
         return calendar.get(Calendar.MONTH);
     }
 
-    public static int getYear(Date executionDate) {
-        Calendar calendar = getExecutionCalendar(executionDate);
+    public static int getYear(Date date) {
+        Calendar calendar = getExecutionCalendar(date);
         return calendar.get(Calendar.YEAR);
     }
 
@@ -36,6 +42,27 @@ public final class DateUtils
         calendar.roll(Calendar.MONTH, false);
         calendar.set(Calendar.DAY_OF_MONTH, day);
         return calendar.getTime();
+    }
+
+    public static Date getLastWorkingDayOfMonth(Date executionDate, int rollWorkingDayOffset) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(executionDate);
+        // get previous month
+        c.roll(Calendar.MONTH, false);
+        // get last day of month
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        int currentOffset = rollWorkingDayOffset;
+        while (isWeekend(c) || currentOffset > 0) {
+            c.roll(Calendar.DAY_OF_MONTH, false);
+            if (!isWeekend(c)) {
+                currentOffset--;
+            }
+        }
+        return c.getTime();
+    }
+
+    public static boolean isWeekend(Calendar c) {
+        return c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
     }
 
     public static Date getPreviousMonthLastDay(Date executionDate)

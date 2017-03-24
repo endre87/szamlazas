@@ -2,20 +2,20 @@ package com.endreit.invoice.inputparameters;
 
 public interface ISalaryParams
 {
-    public static final String LAST_DAY_PROPERTY = "LAST_DAY";
+    String LAST_DAY_PROPERTY = "LAST_DAY";
 
     /**
      * @return 1- 31 day of month or literals: LAST_DAY
      */
-    public String getInvoiceExchangeDay();
+    String getInvoiceExchangeDay();
 
-    public int getTotalSalaryEUR();
+    int getTotalSalaryEUR();
 
-    public int getCMSalaryRON();
+    int getCMSalaryRON();
 
-    public int getAccountingFeeRON();
+    int getAccountingFeeRON();
 
-    public int getSMETaxPercent();
+    int getSMETaxPercent();
 
-    public int getProfitTaxPercent();
+    int getProfitTaxPercent();
 }

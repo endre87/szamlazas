@@ -9,6 +9,8 @@ import com.endreit.invoice.utils.DateUtils;
 
 import net.sf.jxls.transformer.XLSTransformer;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.IOException;
@@ -69,10 +71,35 @@ public abstract class Processor
     }
 
 
-    private InvoiceModel buildInvoiceModel(Date executionDate)
-    {
-        return new InvoiceModel(executionDate, settingParams.getInvoiceDay(), settingParams.getInvoiceServiceDay(), settingParams.getInvoiceServiceDateFormat(),
+    private InvoiceModel buildInvoiceModel(Date executionDate) {
+        Date invoiceDate = getInvoiceDate(executionDate, settingParams.getInvoiceDay());
+        Date invoiceServiceDate = getInvoiceDate(executionDate, settingParams.getInvoiceServiceDay());
+        return new InvoiceModel(executionDate, invoiceDate, invoiceServiceDate, settingParams.getInvoiceServiceDateFormat(),
                 settingParams.getExpenseDateFormat());
+    }
+
+    public static Date getInvoiceDate(Date executionDate, String settingParam) {
+        Date result = null;
+
+        if (NumberUtils.isCreatable(settingParam)) {
+            result = DateUtils.getDateFor(executionDate, NumberUtils.createInteger(settingParam));
+        } else if (StringUtils.isNotEmpty(settingParam)) {
+            int offset = 0;
+            settingParam = settingParam.trim();
+            if (settingParam.startsWith(ISettingParams.LAST_WORKING_DAY)) {
+                if (settingParam.length() != ISettingParams.LAST_WORKING_DAY.length()) {
+                    String offsetString = StringUtils.replacePattern(settingParam, ISettingParams.LAST_WORKING_DAY + "-", "");
+                    if (NumberUtils.isCreatable(offsetString)) {
+                        offset = NumberUtils.createInteger(offsetString);
+                    } else {
+                        offset = 0;
+                    }
+                }
+            }
+            result = DateUtils.getLastWorkingDayOfMonth(executionDate, offset);
+        }
+
+        return result;
     }
 
     private SalaryModel buildSalaryModel(Date executionDate)
