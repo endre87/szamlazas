@@ -6,8 +6,9 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'mvn --version'
-                sh 'mvn package -Dmaven.test.skip=true'
+                // sh 'mvn --version'
+                sh 'pwd'
+                // sh 'mvn package -Dmaven.test.skip=true'
             }
         }
 
