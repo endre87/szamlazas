@@ -14,7 +14,5 @@ public interface ISettingParams
      */
     String getInvoiceServiceDay();
 
-    String getInvoiceServiceDateFormat();
-
     String getExpenseDateFormat();
 }

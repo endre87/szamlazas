@@ -8,8 +8,6 @@ public class SettingParamsPropertyFileImpl implements ISettingParams
 
     private static final String PROPERTY_INVOICE_SERVICE_DAY = "InvoiceServiceDay";
 
-    private static final String PROPERTY_INVOICE_SERVICE_DATE_FORMAT = "InvoiceServiceDateFormat";
-
     private static final String PROPERTY_EXPENSE_DATE_FORMAT = "ExpenseDateFormat";
 
     private final PropertiesReader reader;
@@ -27,11 +25,6 @@ public class SettingParamsPropertyFileImpl implements ISettingParams
     public String getInvoiceServiceDay()
     {
         return reader.getAsString(PROPERTY_INVOICE_SERVICE_DAY);
-    }
-
-    public String getInvoiceServiceDateFormat()
-    {
-        return reader.getAsString(PROPERTY_INVOICE_SERVICE_DATE_FORMAT);
     }
 
     public String getExpenseDateFormat()

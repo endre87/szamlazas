@@ -62,7 +62,7 @@ public abstract class Processor
         beans.put("salary", salary);
 
         String templatePath = getTemplatePath();
-        String destinationPath = getDestinationPath(invoice.getExpenseStringNumber());
+        String destinationPath = getDestinationPath(invoice.getVariable());
 
         LOGGER.info(String.format("Generating xls %s", destinationPath));
         new XLSTransformer().transformXLS(templatePath, beans, destinationPath);
@@ -74,8 +74,7 @@ public abstract class Processor
     private InvoiceModel buildInvoiceModel(Date executionDate) {
         Date invoiceDate = getInvoiceDate(executionDate, settingParams.getInvoiceDay());
         Date invoiceServiceDate = getInvoiceDate(executionDate, settingParams.getInvoiceServiceDay());
-        return new InvoiceModel(executionDate, invoiceDate, invoiceServiceDate, settingParams.getInvoiceServiceDateFormat(),
-                settingParams.getExpenseDateFormat());
+        return new InvoiceModel(executionDate, invoiceDate, invoiceServiceDate, settingParams.getExpenseDateFormat());
     }
 
     public static Date getInvoiceDate(Date executionDate, String settingParam) {
