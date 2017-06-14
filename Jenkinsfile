@@ -18,7 +18,8 @@ pipeline {
                 // sh 'mkdir /var/lib/jenkins/deploy/target'
                 // sh 'cp -v cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar /var/lib/jenkins/deploy/target/'
                 // sh 'cp -v cmdline/GenerateInvoiceXls.sh /var/lib/jenkins/deploy/'
-                archiveArtifacts 'cmdline/GenerateInvoiceXls.sh cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar'
+                // archiveArtifacts 'cmdline/GenerateInvoiceXls.sh cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar'
+                archiveArtifacts 'cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar'
             }
         }
 
