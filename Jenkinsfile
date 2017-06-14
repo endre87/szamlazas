@@ -9,7 +9,6 @@ pipeline {
                 sh 'mvn --version'
                 sh 'pwd'
                 sh 'mvn package -Dmaven.test.skip=true'
-                deleteDir()
             }
         }
 
