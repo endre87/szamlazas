@@ -6,9 +6,26 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                // sh 'mvn --version'
+                sh 'mvn --version'
                 sh 'pwd'
-                // sh 'mvn package -Dmaven.test.skip=true'
+                sh 'mvn package -Dmaven.test.skip=true'
+                deleteDir()
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'rm -frv /var/lib/jenkins/deploy'
+                sh 'mkdir -p /var/lib/jenkins/deploy/target'
+                sh 'chmod 666 /var/lib/jenkins/deploy'
+                sh 'cp -v cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar /var/lib/jenkins/deploy/target/'
+                sh 'cp -v cmdline/GenerateInvoiceXls.sh /var/lib/jenkins/deploy/'
+            }
+        }
+
+        stage('Sanity check') {
+            steps {
+                input "Does the staging environment look ok?"
             }
         }
 
