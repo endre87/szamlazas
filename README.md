@@ -32,7 +32,7 @@
 
 ### Building the application and running it for the first time
     - you might need to delete previously stored file from your windows user directory \.store\google_drive\StoredCredential
-    - run: `mvn package -Dmaven.test.skip=true`
+    - run: **mvn package -Dmaven.test.skip=true**
     - if build was successful, go to cmdline directory and execute `GenerateInvoiceXls.bat` or `GenerateInvoiceXls.sh`
     - on the first execution google needs your permission to let the application manage file on google drive
 
