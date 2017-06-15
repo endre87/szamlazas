@@ -1,8 +1,9 @@
 package com.endreit.invoice.googledrive;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.java6.auth.oauth2.AbstractPromptReceiver;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -90,7 +91,13 @@ public final class MyDrive
                 .setDataStoreFactory(dataStoreFactory)
                 .build();
         // authorize
-        return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+        VerificationCodeReceiver receiver = new AbstractPromptReceiver() {
+            public String getRedirectUri() throws IOException {
+                return "urn:ietf:wg:oauth:2.0:oob";
+            }
+        };
+//        VerificationCodeReceiver receiver = new LocalServerReceiver();
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
     public static <D> D execute(Class<D> clazz, MyDriveOperation<D> driveExecutor)
