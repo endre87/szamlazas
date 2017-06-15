@@ -1,10 +1,16 @@
 #!/usr/bin/env groovy
 
 pipeline {
-    agent { docker 'maven:3.3.3' }
+    agent none
 
     stages {
         stage('build') {
+            agent {
+                docker {
+                    image 'mymaven:latest'
+                    args  '-v /mnt/nfs:/mnt/nfs'
+                }
+            }
             steps {
                 sh 'mvn --version'
                 sh 'pwd'
@@ -13,26 +19,20 @@ pipeline {
         }
 
         stage('deploy') {
+            agent any
             steps {
-                // sh 'rm -frv /var/lib/jenkins/deploy/**'
-                // sh 'mkdir /var/lib/jenkins/deploy/target'
-                // sh 'cp -v cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar /var/lib/jenkins/deploy/target/'
-                // sh 'cp -v cmdline/GenerateInvoiceXls.sh /var/lib/jenkins/deploy/'
-                // archiveArtifacts 'cmdline/GenerateInvoiceXls.sh cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar'
-                archiveArtifacts 'cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar'
+                sh 'rm -frv /mnt/nfs/deploy/**'
+                sh 'mkdir -p /mnt/nfs/deploy/target'
+                sh 'cp -v cmdline/target/cmdline-1.0.0-jar-with-dependencies.jar /mnt/nfs/deploy/target/'
+                sh 'cp -v cmdline/GenerateInvoiceXls.sh /mnt/nfs/deploy/'
             }
         }
 
         stage('sanity check') {
+            agent any
             steps {
                 input "Does the staging environment look ok?"
             }
         }
-
-        // stage('deploy') {
-        //     steps {
-        //
-        //     }
-        // }
     }
 }
