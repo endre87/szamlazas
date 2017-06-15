@@ -32,33 +32,33 @@
 
 ### Building the application and running it for the first time
     - you might need to delete previously stored file from your windows user directory \.store\google_drive\StoredCredential
-    - run: __mvn package -Dmaven.test.skip=true__
-    - if build was successful, go to cmdline directory and execute __GenerateInvoiceXls.bat__ or __GenerateInvoiceXls.sh__
+    - run: `mvn package -Dmaven.test.skip=true`
+    - if build was successful, go to cmdline directory and execute `GenerateInvoiceXls.bat` or `GenerateInvoiceXls.sh`
     - on the first execution google needs your permission to let the application manage file on google drive
 
 ## CI - Docker & Jenkins
 ### Prerequisites
     On the host machine where Jenkins will do the build we need Docker. The project will be built using maven on a ephemeral docker container.
-    After a successful build, the executable will be copied into __/mnt/nfs/deploy__
-    Create this directory in the host machine and assign it to owner and group __jenkins__
-    __sudo mkdir -p -v /mnt/nfs/deploy/__
-    __sudo chown jenkins /mnt/nfs/deploy/__
-    __sudo chgrp jenkins /mnt/nfs/deploy/__
+    After a successful build, the executable will be copied into `/mnt/nfs/deploy`
+    Create this directory in the host machine and assign it to owner and group `jenkins`
+    `sudo mkdir -p -v /mnt/nfs/deploy/`
+    `sudo chown jenkins /mnt/nfs/deploy/`
+    `sudo chgrp jenkins /mnt/nfs/deploy/`
 
 ### Docker
     - install Docker
         https://www.voyalab.com/2017/04/01/installing-docker-community-edition-on-ubuntu/
 
-    - install __mymaven__ image from Dockerfile using command:
-        __docker build -t mymaven .__
+    - install `mymaven` image from Dockerfile using command:
+        `docker build -t mymaven .`
 
     - optionally can push the image to the registry
-        __docker push mymaven__
+        `docker push mymaven`
 
 ### Jenkins
     - install Jenkins
 
     - create a new Pipeline build
-        For Definition choose __Pipeline script from SCM__ and set Script Path to __Jenkinsfile__
+        For Definition choose `Pipeline script from SCM` and set Script Path to `Jenkinsfile`
 
 Ready to build with Jenkins!
